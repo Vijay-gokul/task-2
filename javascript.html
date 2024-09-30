@@ -1,0 +1,90 @@
+let currentTaskLi = null; // To store the current task being edited
+
+document.getElementById('add-task').addEventListener('click', function() {
+    const taskInput = document.getElementById('task-input');
+    const deadlineInput = document.getElementById('custom-deadline');
+
+    if (taskInput.value === '' || deadlineInput.value === '') {
+        alert('Please enter a task and a deadline.');
+        return;
+    }
+
+    const taskList = document.getElementById('task-list');
+    const completedList = document.getElementById('completed-list');
+    
+    const li = document.createElement('li');
+    li.textContent = `${taskInput.value} - Due: ${new Date(deadlineInput.value).toLocaleString()}`;
+    
+    const completeButton = document.createElement('button');
+    completeButton.textContent = 'Complete';
+    completeButton.className = 'complete';
+    completeButton.onclick = function() {
+        li.classList.add('completed');
+        completedList.appendChild(li);
+        completeButton.style.display = 'none';
+        editButton.style.display = 'none';
+        deleteButton.style.display = 'none';
+    };
+    
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.className = 'edit';
+    editButton.onclick = function() {
+        document.getElementById('edit-task-name').value = taskInput.value;
+        document.getElementById('edit-task-deadline').value = deadlineInput.value;
+        currentTaskLi = li; // Store the current task for editing
+        document.getElementById('edit-modal').style.display = 'block'; // Show modal
+    };
+    
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.className = 'delete';
+    deleteButton.onclick = function() {
+        li.remove();
+    };
+    
+    li.appendChild(completeButton);
+    li.appendChild(editButton);
+    li.appendChild(deleteButton);
+    taskList.appendChild(li);
+
+    const deadline = new Date(deadlineInput.value);
+    const now = new Date();
+    const timeToAlarm = deadline - now;
+
+    if (timeToAlarm > 0) {
+        setTimeout(() => {
+            alert(`Time's up for your task: ${taskInput.value}!`);
+        }, timeToAlarm);
+    }
+
+    taskInput.value = '';
+    deadlineInput.value = '';
+});
+
+// Close the modal when the user clicks on <span> (x)
+document.querySelector('.close').onclick = function() {
+    document.getElementById('edit-modal').style.display = 'none';
+};
+
+// Save changes when the user clicks on "Save Changes"
+document.getElementById('save-changes').onclick = function() {
+    const newTaskName = document.getElementById('edit-task-name').value;
+    const newDeadline = document.getElementById('edit-task-deadline').value;
+
+    if (newTaskName !== '' && newDeadline !== '') {
+        currentTaskLi.firstChild.textContent = `${newTaskName} - Due: ${new Date(newDeadline).toLocaleString()}`;
+        currentTaskLi = null; // Clear current task
+        document.getElementById('edit-modal').style.display = 'none'; // Hide modal
+    } else {
+        alert('Please enter both task name and deadline.');
+    }
+};
+
+// Close the modal when the user clicks anywhere outside of the modal
+window.onclick = function(event) {
+    const modal = document.getElementById('edit-modal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+};

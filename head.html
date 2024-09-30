@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List with Alarm</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="input-area">
+            <input type="text" id="task-input" placeholder="Add a new task..." required>
+            <input type="datetime-local" id="custom-deadline" required>
+            <button id="add-task" class="add">Add Task</button>
+        </div>
+        
+        <h2>Tasks</h2>
+        <ul id="task-list"></ul>
+        
+        <h2>Completed Tasks</h2>
+        <ul id="completed-list"></ul>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Task</h2>
+            <input type="text" id="edit-task-name" placeholder="Task Name" required>
+            <input type="datetime-local" id="edit-task-deadline" required>
+            <button id="save-changes" class="save">Save Changes</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
